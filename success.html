@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Papillon Center — Message Sent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --sky-top: #d0e4f7;
+    --sky-mid: #e8d4ef;
+    --sky-bot: #fce4ec;
+    --white: #ffffff;
+    --text: #3a3255;
+    --text-light: #7e6f99;
+    --accent: #a17fc7;
+    --accent-soft: #c9a7e4;
+    --pink: #f2a7c3;
+    --blue: #7fb8e0;
+    --blue-deep: #5a9dcf;
+    --shadow: 0 8px 32px rgba(90,60,130,0.10);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    min-height: 100vh;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 300;
+    color: var(--text);
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(127,184,224,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 90% at 80% 90%, rgba(242,167,195,0.4) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 70% at 50% 50%, rgba(201,167,228,0.25) 0%, transparent 50%),
+      linear-gradient(170deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-bot) 100%);
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(circle 220px at 15% 70%, rgba(242,167,195,0.25) 0%, transparent 100%),
+      radial-gradient(circle 180px at 85% 25%, rgba(127,184,224,0.3) 0%, transparent 100%),
+      radial-gradient(circle 260px at 50% 85%, rgba(255,255,255,0.35) 0%, transparent 100%);
+    animation: orbDrift 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes orbDrift {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(20px, -15px) scale(1.04); }
+    100% { transform: translate(-10px, 10px) scale(0.97); }
+  }
+
+  .creatures {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .creature {
+    position: absolute;
+    will-change: transform, opacity;
+    transition: opacity 0.8s;
+  }
+
+  .butterfly svg { animation: wingFlap 0.45s ease-in-out infinite alternate; }
+  .butterfly.landed svg { animation: wingSlow 1.4s ease-in-out infinite alternate; }
+  @keyframes wingFlap {
+    0%   { transform: scaleX(1); }
+    100% { transform: scaleX(0.55); }
+  }
+  @keyframes wingSlow {
+    0%   { transform: scaleX(1); }
+    100% { transform: scaleX(0.8); }
+  }
+
+
+
+  /* ─── Card ─── */
+  .card {
+    width: 100%;
+    max-width: 520px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 24px;
+    padding: 3.5rem 2.5rem 3rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+    animation: cardIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes cardIn {
+    0% { opacity: 0; transform: translateY(30px) scale(0.97); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ─── Checkmark ─── */
+  .check-ring {
+    width: 72px; height: 72px;
+    margin: 0 auto 1.6rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--accent-soft) 60%, var(--pink) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: ringPop 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    box-shadow: 0 4px 20px rgba(161,127,199,0.25);
+  }
+
+  @keyframes ringPop {
+    0% { opacity: 0; transform: scale(0.3); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .check-ring svg {
+    width: 32px; height: 32px;
+    stroke: #fff;
+    stroke-width: 3;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: drawCheck 0.5s 0.75s ease forwards;
+  }
+
+  @keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 2rem;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+  }
+
+  .msg {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.65;
+    max-width: 380px;
+    margin: 0 auto 2rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    padding: 0.7rem 2rem;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue-deep) 0%, var(--accent) 55%, var(--pink) 100%);
+    background-size: 200% 200%;
+    animation: gradShift 6s ease infinite;
+    box-shadow: 0 4px 18px rgba(161,127,199,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .back-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(161,127,199,0.35);
+  }
+
+  @keyframes gradShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ─── Sparkle Cursor ─── */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    animation: sparkleFade 0.6s ease-out forwards;
+  }
+
+  @keyframes sparkleFade {
+    0%   { opacity: 1; transform: scale(1) translate(0,0); }
+    100% { opacity: 0; transform: scale(0) translate(var(--sx), var(--sy)); }
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 2.5rem 1.5rem 2rem; border-radius: 18px; }
+    .brand { font-size: 1.65rem; }
+    .heading { font-size: 1.3rem; }
+  }
+  @media (max-width: 380px) {
+    body { padding: 1rem 0.5rem; }
+    .card { padding: 2rem 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="creatures" id="creatures"></div>
+
+<div class="card">
+  <div class="check-ring">
+    <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
+  </div>
+  <h1 class="brand">Papillon Center</h1>
+  <h2 class="heading">Message Sent</h2>
+  <p class="msg">Thank you for reaching out! We've received your message and will be in touch soon.</p>
+  <a href="index.html" class="back-link">Back to Contact</a>
+</div>
+
+<script>
+(function(){
+
+  /* ─── Creature generation ─── */
+  const creaturesEl = document.getElementById('creatures');
+  const W = () => window.innerWidth;
+  const H = () => window.innerHeight;
+
+  function makeSVGButterfly(hue1, hue2, size) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="14" cy="16" rx="11" ry="8" fill="hsla(${hue1},70%,75%,0.6)" transform="rotate(-15 14 16)"/>
+      <ellipse cx="26" cy="16" rx="11" ry="8" fill="hsla(${hue2},65%,78%,0.55)" transform="rotate(15 26 16)"/>
+      <ellipse cx="15" cy="26" rx="7" ry="5.5" fill="hsla(${hue1},60%,80%,0.5)" transform="rotate(-10 15 26)"/>
+      <ellipse cx="25" cy="26" rx="7" ry="5.5" fill="hsla(${hue2},55%,82%,0.45)" transform="rotate(10 25 26)"/>
+      <rect x="19.3" y="10" width="1.4" height="18" rx="0.7" fill="hsla(${hue1},30%,50%,0.45)"/>
+      <line x1="19" y1="12" x2="13" y2="6" stroke="hsla(${hue1},30%,50%,0.35)" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="21" y1="12" x2="27" y2="6" stroke="hsla(${hue2},30%,50%,0.35)" stroke-width="0.8" stroke-linecap="round"/>
+      <circle cx="12.5" cy="5.5" r="1" fill="hsla(${hue1},40%,60%,0.4)"/>
+      <circle cx="27.5" cy="5.5" r="1" fill="hsla(${hue2},40%,60%,0.4)"/>
+    </svg>`;
+  }
+
+  const mouse = { x: -9999, y: -9999, active: false, speed: 0, still: false, stillTime: 0 };
+  let prevMx = -9999, prevMy = -9999, lastMoveTime = 0;
+  const hasMouse = window.matchMedia('(pointer:fine)').matches;
+
+  if(hasMouse) {
+    document.addEventListener('mousemove', e => {
+      const now = Date.now();
+      const dx = e.clientX - prevMx, dy = e.clientY - prevMy;
+      mouse.speed = Math.sqrt(dx*dx + dy*dy) / Math.max(1, now - lastMoveTime) * 16;
+      prevMx = e.clientX; prevMy = e.clientY;
+      mouse.x = e.clientX; mouse.y = e.clientY;
+      mouse.active = true; mouse.still = false; mouse.stillTime = 0;
+      lastMoveTime = now;
+    });
+    document.addEventListener('mouseleave', () => { mouse.active = false; mouse.still = false; });
+  }
+
+  const butterflies = [];
+  const MAX_BUTTERFLIES = 14;
+  const ATTRACT_RADIUS = 160;
+  const SCATTER_SPEED = 4;
+  const SCATTER_DECAY = 0.95;
+  const ORBIT_RADIUS = 40;
+  const SCATTER_COOLDOWN = 180;
+
+  function createButterfly() {
+    const el = document.createElement('div');
+    el.classList.add('creature', 'butterfly');
+    const size = 28 + Math.random()*22;
+    const h1 = Math.random()>0.5 ? 210+Math.random()*30 : 320+Math.random()*30;
+    const h2 = Math.random()>0.5 ? 320+Math.random()*30 : 210+Math.random()*30;
+    el.innerHTML = makeSVGButterfly(h1, h2, size);
+    el.querySelector('svg').style.animationDuration = (0.3 + Math.random()*0.3) + 's';
+    el.style.opacity = '0';
+    creaturesEl.appendChild(el);
+    const b = {
+      el, x: Math.random()*W(), y: Math.random()*H(),
+      vx: (Math.random()-0.5)*0.6, vy: (Math.random()-0.5)*0.6,
+      baseSpeed: 0.2+Math.random()*0.35, wanderAngle: Math.random()*Math.PI*2,
+      wanderRate: 0.01+Math.random()*0.02, opacity: 0, fadeIn: true, age: 0,
+      lifetime: (20+Math.random()*18)*60, state: 'wander',
+      scatterVx: 0, scatterVy: 0, orbitAngle: Math.random()*Math.PI*2,
+      orbitDist: ORBIT_RADIUS+Math.random()*20, cooldown: 0, size
+    };
+    butterflies.push(b);
+    return b;
+  }
+
+  for(let i=0;i<10;i++) { const b=createButterfly(); b.age=Math.random()*b.lifetime*0.5; b.opacity=0.55; b.fadeIn=false; }
+  let spawnTimer = 0, landedButterfly = null;
+  const MIN_BUTTERFLIES = 3;
+
+  function tick() {
+    const w=W(), h=H();
+    if(hasMouse&&mouse.active){if(mouse.speed<0.5){mouse.stillTime++;if(mouse.stillTime>40)mouse.still=true;}else{mouse.still=false;mouse.stillTime=0;}}
+    const justMoved=mouse.speed>3&&mouse.active;
+    spawnTimer++;
+    const needMore=butterflies.length<MIN_BUTTERFLIES;
+    if((spawnTimer>180||needMore)&&butterflies.length<MAX_BUTTERFLIES){
+      spawnTimer=0;const nb=createButterfly();
+      const edge=Math.floor(Math.random()*4);
+      if(edge===0){nb.x=-30;nb.y=Math.random()*h;}else if(edge===1){nb.x=w+30;nb.y=Math.random()*h;}else if(edge===2){nb.y=-30;nb.x=Math.random()*w;}else{nb.y=h+30;nb.x=Math.random()*w;}
+    }
+    let closestAttracted=null,closestDist=Infinity;
+    for(let i=butterflies.length-1;i>=0;i--){
+      const b=butterflies[i];b.age++;
+      if(b.cooldown>0)b.cooldown--;
+      if(b.fadeIn){b.opacity=Math.min(0.6,b.opacity+0.008);if(b.opacity>=0.55)b.fadeIn=false;}
+      const offM=120;if(b.state==='wander'&&(b.x<-offM||b.x>w+offM||b.y<-offM||b.y>h+offM)){b.el.remove();if(landedButterfly===b)landedButterfly=null;butterflies.splice(i,1);continue;}
+      const dx=mouse.x-b.x,dy=mouse.y-b.y,dist=Math.sqrt(dx*dx+dy*dy);
+      if(b.state==='landed'&&justMoved){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*0.8;b.scatterVx=Math.cos(a)*SCATTER_SPEED;b.scatterVy=Math.sin(a)*SCATTER_SPEED;b.el.classList.remove('landed');landedButterfly=null;b.cooldown=SCATTER_COOLDOWN;}
+      else if(b.state==='orbiting'&&justMoved){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*1.0;b.scatterVx=Math.cos(a)*SCATTER_SPEED*(0.6+Math.random()*0.4);b.scatterVy=Math.sin(a)*SCATTER_SPEED*(0.6+Math.random()*0.4);b.cooldown=SCATTER_COOLDOWN;}
+      else if(b.state==='attracted'&&justMoved&&dist<ATTRACT_RADIUS){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*1.2;b.scatterVx=Math.cos(a)*SCATTER_SPEED*(0.4+Math.random()*0.3);b.scatterVy=Math.sin(a)*SCATTER_SPEED*(0.4+Math.random()*0.3);b.cooldown=SCATTER_COOLDOWN;}
+      else if(b.state==='scattering'){b.scatterVx*=SCATTER_DECAY;b.scatterVy*=SCATTER_DECAY;if(Math.abs(b.scatterVx)<0.15&&Math.abs(b.scatterVy)<0.15){b.state='wander';b.wanderAngle=Math.atan2(b.vy,b.vx)||Math.random()*Math.PI*2;}}
+      else if(b.state==='wander'&&mouse.active&&dist<ATTRACT_RADIUS&&b.cooldown<=0)b.state='attracted';
+      else if(b.state==='attracted'&&(!mouse.active||dist>ATTRACT_RADIUS*1.5)){b.state='wander';b.wanderAngle=Math.atan2(b.vy,b.vx)||Math.random()*Math.PI*2;}
+      else if(b.state==='attracted'&&mouse.still&&dist<ORBIT_RADIUS+40){b.state='orbiting';b.orbitAngle=Math.atan2(b.y-mouse.y,b.x-mouse.x);b.orbitDist=Math.max(ORBIT_RADIUS,dist);}
+      else if(b.state==='orbiting'&&!mouse.active){b.state='wander';b.wanderAngle=b.orbitAngle;}
+      else if(b.state==='orbiting'&&!mouse.still){b.state='wander';b.wanderAngle=b.orbitAngle;b.cooldown=SCATTER_COOLDOWN;}
+      if(b.state==='orbiting'&&dist<closestDist&&landedButterfly===null&&mouse.still&&mouse.stillTime>120){closestDist=dist;closestAttracted=b;}
+      switch(b.state){
+        case 'wander':{b.wanderAngle+=(Math.random()-0.5)*b.wanderRate*2;b.vx+=Math.cos(b.wanderAngle)*0.03;b.vy+=Math.sin(b.wanderAngle)*0.03;const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy);if(s>b.baseSpeed){b.vx*=0.96;b.vy*=0.96;}b.x+=b.vx;b.y+=b.vy;break;}
+        case 'attracted':{const a=Math.atan2(dy,dx);const p=Math.min(0.05,dist*0.0003);b.vx+=Math.cos(a)*p;b.vy+=Math.sin(a)*p;b.vx*=0.97;b.vy*=0.97;const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy),ms=b.baseSpeed*1.6;if(s>ms){b.vx*=ms/s;b.vy*=ms/s;}b.x+=b.vx;b.y+=b.vy;break;}
+        case 'orbiting':{b.orbitAngle+=0.012;const tx=mouse.x+Math.cos(b.orbitAngle)*b.orbitDist,ty=mouse.y+Math.sin(b.orbitAngle)*b.orbitDist;b.x+=(tx-b.x)*0.035;b.y+=(ty-b.y)*0.035;if(b.orbitDist>ORBIT_RADIUS)b.orbitDist-=0.05;b.vx=(tx-b.x)*0.035;b.vy=(ty-b.y)*0.035;break;}
+        case 'landed':{const tX=mouse.x+8,tY=mouse.y-b.size*0.5;const by=Math.sin(b.age*0.025)*0.8;b.x+=(tX-b.x)*0.08;b.y+=(tY+by-b.y)*0.08;b.vx=0;b.vy=0;break;}
+        case 'scattering':{b.x+=b.scatterVx;b.y+=b.scatterVy;b.vx=b.scatterVx;b.vy=b.scatterVy;break;}
+      }
+      const rot=b.state==='landed'?0:Math.atan2(b.vy,b.vx)*(180/Math.PI)*0.15;
+      b.el.style.transform=`translate(${b.x-b.size/2}px, ${b.y-b.size/2}px) rotate(${rot}deg)`;
+      b.el.style.opacity=b.opacity;
+    }
+    if(closestAttracted&&landedButterfly===null&&mouse.still&&mouse.stillTime>120){closestAttracted.state='landed';closestAttracted.el.classList.add('landed');landedButterfly=closestAttracted;}
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  if(hasMouse) {
+    const colors = ['#c9a7e4','#f2a7c3','#7fb8e0','#ffffff','#e8c8f8'];
+    let lastSparkle = 0;
+    document.addEventListener('mousemove', e => {
+      const now = Date.now();
+      if(now - lastSparkle < 45) return;
+      lastSparkle = now;
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      const sz = 3 + Math.random()*5;
+      s.style.width = sz+'px'; s.style.height = sz+'px';
+      s.style.left = (e.clientX - sz/2) + 'px'; s.style.top = (e.clientY - sz/2) + 'px';
+      s.style.background = colors[Math.floor(Math.random()*colors.length)];
+      s.style.setProperty('--sx', (Math.random()-0.5)*24+'px');
+      s.style.setProperty('--sy', (Math.random()-0.5)*24+'px');
+      s.style.boxShadow = `0 0 ${4+Math.random()*4}px ${s.style.background}`;
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 600);
+    });
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Papillon Center — Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --sky-top: #d0e4f7;
+    --sky-mid: #e8d4ef;
+    --sky-bot: #fce4ec;
+    --white: #ffffff;
+    --text: #3a3255;
+    --text-light: #7e6f99;
+    --accent: #a17fc7;
+    --accent-soft: #c9a7e4;
+    --pink: #f2a7c3;
+    --blue: #7fb8e0;
+    --blue-deep: #5a9dcf;
+    --error: #d94f5c;
+    --input-bg: rgba(255,255,255,0.72);
+    --input-border: rgba(161,127,199,0.3);
+    --input-focus: rgba(161,127,199,0.6);
+    --shadow: 0 8px 32px rgba(90,60,130,0.10);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    min-height: 100vh;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 300;
+    color: var(--text);
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  /* ─── Ethereal gradient background ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(127,184,224,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 90% at 80% 90%, rgba(242,167,195,0.4) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 70% at 50% 50%, rgba(201,167,228,0.25) 0%, transparent 50%),
+      linear-gradient(170deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-bot) 100%);
+  }
+
+  /* Soft floating orbs */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(circle 220px at 15% 70%, rgba(242,167,195,0.25) 0%, transparent 100%),
+      radial-gradient(circle 180px at 85% 25%, rgba(127,184,224,0.3) 0%, transparent 100%),
+      radial-gradient(circle 260px at 50% 85%, rgba(255,255,255,0.35) 0%, transparent 100%);
+    animation: orbDrift 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes orbDrift {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(20px, -15px) scale(1.04); }
+    100% { transform: translate(-10px, 10px) scale(0.97); }
+  }
+
+  /* ─── Floating creatures canvas ─── */
+  .creatures {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .creature {
+    position: absolute;
+    will-change: transform, opacity;
+    transition: opacity 0.8s;
+  }
+
+  .butterfly svg { animation: wingFlap 0.45s ease-in-out infinite alternate; }
+  .butterfly.landed svg { animation: wingSlow 1.4s ease-in-out infinite alternate; }
+  @keyframes wingFlap {
+    0%   { transform: scaleX(1); }
+    100% { transform: scaleX(0.55); }
+  }
+  @keyframes wingSlow {
+    0%   { transform: scaleX(1); }
+    100% { transform: scaleX(0.8); }
+  }
+
+
+
+  /* ─── Card ─── */
+  .card {
+    width: 100%;
+    max-width: 520px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 24px;
+    padding: 3rem 2.5rem 2.5rem;
+    box-shadow: var(--shadow);
+    position: relative;
+    animation: cardIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes cardIn {
+    0% { opacity: 0; transform: translateY(30px) scale(0.97); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 2rem;
+    text-align: center;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.25rem;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 2.2rem;
+  }
+
+  /* ─── Form ─── */
+  .field { margin-bottom: 1.4rem; position: relative; }
+
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-light);
+    margin-bottom: 0.45rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--input-bg);
+    border: 1.5px solid var(--input-border);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+  }
+
+  input:focus, textarea:focus {
+    border-color: var(--input-focus);
+    background: rgba(255,255,255,0.88);
+    box-shadow: 0 0 0 3px rgba(161,127,199,0.12);
+  }
+
+  input.invalid, textarea.invalid {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(217,79,92,0.1);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 110px;
+    max-height: 200px;
+    line-height: 1.55;
+  }
+
+  .char-count {
+    text-align: right;
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 0.3rem;
+    transition: color 0.3s;
+  }
+  .char-count.warn { color: var(--error); }
+
+  .error-msg {
+    font-size: 0.75rem;
+    color: var(--error);
+    margin-top: 0.3rem;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  /* ─── Info Tooltip ─── */
+  .info-tip {
+    position: relative;
+    display: inline-block;
+    margin-left: 0.1rem;
+    vertical-align: super;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--input-border);
+    color: var(--text-light);
+    font-size: 0.45rem;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 1;
+    transition: background 0.25s, color 0.25s;
+  }
+
+  .info-tip:hover .info-icon,
+  .info-tip:focus .info-icon {
+    background: var(--accent-soft);
+    color: var(--white);
+  }
+
+  .info-bubble {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: -8px;
+    transform: scale(0.95);
+    width: min(230px, calc(100vw - 3rem));
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(161,127,199,0.25);
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+    font-style: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.5;
+    color: var(--text);
+    box-shadow: 0 4px 16px rgba(90,60,130,0.12);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 10;
+  }
+
+  .info-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 14px;
+    border: 6px solid transparent;
+    border-top-color: rgba(255,255,255,0.92);
+  }
+
+  .info-tip:hover .info-bubble,
+  .info-tip:focus .info-bubble {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+  }
+
+  /* ─── Submit Button ─── */
+  .btn {
+    display: block;
+    width: 100%;
+    margin-top: 0.6rem;
+    padding: 0.85rem;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--blue-deep) 0%, var(--accent) 55%, var(--pink) 100%);
+    background-size: 200% 200%;
+    animation: gradShift 6s ease infinite;
+    box-shadow: 0 4px 18px rgba(161,127,199,0.25);
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(161,127,199,0.35);
+  }
+  .btn:active:not(:disabled) { transform: translateY(0); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  @keyframes gradShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .btn .spinner {
+    display: none;
+    width: 20px; height: 20px;
+    border: 2.5px solid rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto;
+  }
+  .btn.loading .btn-text { display: none; }
+  .btn.loading .spinner { display: block; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── Server Error Banner ─── */
+  .server-error {
+    display: none;
+    background: rgba(217,79,92,0.1);
+    border: 1px solid rgba(217,79,92,0.3);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.4rem;
+    font-size: 0.85rem;
+    color: var(--error);
+    line-height: 1.5;
+  }
+  .server-error.show { display: block; }
+
+  /* ─── Sparkle Cursor ─── */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    animation: sparkleFade 0.6s ease-out forwards;
+  }
+
+  @keyframes sparkleFade {
+    0%   { opacity: 1; transform: scale(1) translate(0,0); }
+    100% { opacity: 0; transform: scale(0) translate(var(--sx), var(--sy)); }
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 600px) {
+    .card { padding: 2rem 1.5rem 2rem; border-radius: 18px; }
+    .brand { font-size: 1.65rem; }
+    .subtitle { font-size: 0.95rem; margin-bottom: 1.6rem; }
+  }
+  @media (max-width: 380px) {
+    body { padding: 1rem 0.5rem; }
+    .card { padding: 1.5rem 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="creatures" id="creatures"></div>
+
+<div class="card">
+  <h1 class="brand">Papillon Center</h1>
+  <p class="subtitle">We're so glad you're considering us for the next step in your journey</p>
+
+  <div class="server-error" id="serverError">
+    Something went wrong while sending your message. Please try again a little later.
+  </div>
+
+  <form id="contactForm" action="https://formsubmit.co/YOUR_EMAIL_HERE" method="POST" novalidate>
+    <!-- formsubmit.co configuration -->
+    <input type="hidden" name="_next" value="">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+    <div class="field">
+      <label for="name">Name <span class="info-tip" tabindex="0" role="button" aria-label="More info about the name field"><span class="info-icon">?</span><span class="info-bubble">No need for formalities here — whatever name feels most like you is the one we'd love to use.</span></span></label>
+      <input type="text" id="name" name="name" placeholder="Your preferred name" required autocomplete="name">
+      <div class="error-msg" id="nameError">Please enter your name.</div>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+      <div class="error-msg" id="emailError">Please enter a valid email address.</div>
+    </div>
+
+    <div class="field">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="How can we help?" required maxlength="1200"></textarea>
+      <div class="char-count"><span id="charUsed">0</span> / 1200</div>
+      <div class="error-msg" id="messageError">Please write a short message.</div>
+    </div>
+
+    <button type="submit" class="btn" id="submitBtn">
+      <span class="btn-text">Send Message</span>
+      <div class="spinner"></div>
+    </button>
+  </form>
+</div>
+
+<script>
+(function(){
+
+  /* ─── Dynamic _next URL ─── */
+  const baseURL = window.location.href.replace(/\/[^\/]*$/, '/');
+  document.querySelector('input[name="_next"]').value = baseURL + 'success.html';
+
+  /* ─── Creature generation ─── */
+  const creaturesEl = document.getElementById('creatures');
+  const W = () => window.innerWidth;
+  const H = () => window.innerHeight;
+
+  function makeSVGButterfly(hue1, hue2, size) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="14" cy="16" rx="11" ry="8" fill="hsla(${hue1},70%,75%,0.6)" transform="rotate(-15 14 16)"/>
+      <ellipse cx="26" cy="16" rx="11" ry="8" fill="hsla(${hue2},65%,78%,0.55)" transform="rotate(15 26 16)"/>
+      <ellipse cx="15" cy="26" rx="7" ry="5.5" fill="hsla(${hue1},60%,80%,0.5)" transform="rotate(-10 15 26)"/>
+      <ellipse cx="25" cy="26" rx="7" ry="5.5" fill="hsla(${hue2},55%,82%,0.45)" transform="rotate(10 25 26)"/>
+      <rect x="19.3" y="10" width="1.4" height="18" rx="0.7" fill="hsla(${hue1},30%,50%,0.45)"/>
+      <line x1="19" y1="12" x2="13" y2="6" stroke="hsla(${hue1},30%,50%,0.35)" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="21" y1="12" x2="27" y2="6" stroke="hsla(${hue2},30%,50%,0.35)" stroke-width="0.8" stroke-linecap="round"/>
+      <circle cx="12.5" cy="5.5" r="1" fill="hsla(${hue1},40%,60%,0.4)"/>
+      <circle cx="27.5" cy="5.5" r="1" fill="hsla(${hue2},40%,60%,0.4)"/>
+    </svg>`;
+  }
+
+  /* ─── Mouse state ─── */
+  const mouse = { x: -9999, y: -9999, active: false, speed: 0, still: false, stillTime: 0 };
+  let prevMx = -9999, prevMy = -9999, lastMoveTime = 0;
+  const hasMouse = window.matchMedia('(pointer:fine)').matches;
+
+  if(hasMouse) {
+    document.addEventListener('mousemove', e => {
+      const now = Date.now();
+      const dx = e.clientX - prevMx, dy = e.clientY - prevMy;
+      mouse.speed = Math.sqrt(dx*dx + dy*dy) / Math.max(1, now - lastMoveTime) * 16;
+      prevMx = e.clientX; prevMy = e.clientY;
+      mouse.x = e.clientX; mouse.y = e.clientY;
+      mouse.active = true;
+      mouse.still = false;
+      mouse.stillTime = 0;
+      lastMoveTime = now;
+    });
+    document.addEventListener('mouseleave', () => { mouse.active = false; mouse.still = false; });
+  }
+
+  /* ─── Butterfly pool ─── */
+  const butterflies = [];
+  const MAX_BUTTERFLIES = 14;
+  const ATTRACT_RADIUS = 160;
+  const LAND_RADIUS = 28;
+  const SCATTER_SPEED = 4;
+  const SCATTER_DECAY = 0.95;
+  const ORBIT_RADIUS = 40;
+  const SCATTER_COOLDOWN = 180; // frames before re-attraction after scatter
+
+  function createButterfly() {
+    const el = document.createElement('div');
+    el.classList.add('creature', 'butterfly');
+    const size = 28 + Math.random()*22;
+    const h1 = Math.random()>0.5 ? 210+Math.random()*30 : 320+Math.random()*30;
+    const h2 = Math.random()>0.5 ? 320+Math.random()*30 : 210+Math.random()*30;
+    el.innerHTML = makeSVGButterfly(h1, h2, size);
+    el.querySelector('svg').style.animationDuration = (0.3 + Math.random()*0.3) + 's';
+    el.style.opacity = '0';
+    creaturesEl.appendChild(el);
+
+    const b = {
+      el,
+      x: Math.random() * W(),
+      y: Math.random() * H(),
+      vx: (Math.random()-0.5) * 0.6,
+      vy: (Math.random()-0.5) * 0.6,
+      baseSpeed: 0.2 + Math.random()*0.35,
+      wanderAngle: Math.random() * Math.PI * 2,
+      wanderRate: 0.01 + Math.random()*0.02,
+      opacity: 0,
+      fadeIn: true,
+      age: 0,
+      lifetime: (20 + Math.random()*18) * 60, // frames
+      state: 'wander',  // wander | attracted | orbiting | landed | scattering
+      scatterVx: 0,
+      scatterVy: 0,
+      orbitAngle: Math.random() * Math.PI * 2,
+      orbitDist: ORBIT_RADIUS + Math.random()*20,
+      cooldown: 0, // frames remaining before can be re-attracted
+      size
+    };
+    butterflies.push(b);
+    return b;
+  }
+
+  /* Spawn initial batch */
+  for(let i = 0; i < 10; i++) {
+    const b = createButterfly();
+    b.age = Math.random() * b.lifetime * 0.5;
+    b.opacity = 0.55;
+    b.fadeIn = false;
+  }
+
+  let spawnTimer = 0;
+
+  /* ─── Which butterfly is currently landed ─── */
+  let landedButterfly = null;
+  const MIN_BUTTERFLIES = 3;
+
+  /* ─── Physics tick ─── */
+  function tick() {
+    const w = W(), h = H();
+
+    /* Detect mouse stillness */
+    if(hasMouse && mouse.active) {
+      if(mouse.speed < 0.5) {
+        mouse.stillTime++;
+        if(mouse.stillTime > 40) mouse.still = true;
+      } else {
+        mouse.still = false;
+        mouse.stillTime = 0;
+      }
+    }
+
+    /* Did mouse just start moving? */
+    const justMoved = mouse.speed > 3 && mouse.active;
+
+    /* Spawn new butterflies — ensure minimum count and periodic spawning */
+    spawnTimer++;
+    const needMore = butterflies.length < MIN_BUTTERFLIES;
+    if((spawnTimer > 180 || needMore) && butterflies.length < MAX_BUTTERFLIES) {
+      spawnTimer = 0;
+      const nb = createButterfly();
+      const edge = Math.floor(Math.random()*4);
+      if(edge===0) { nb.x = -30; nb.y = Math.random()*h; }
+      else if(edge===1) { nb.x = w+30; nb.y = Math.random()*h; }
+      else if(edge===2) { nb.y = -30; nb.x = Math.random()*w; }
+      else { nb.y = h+30; nb.x = Math.random()*w; }
+    }
+
+    /* Find closest attracted butterfly to cursor (for landing) */
+    let closestAttracted = null;
+    let closestDist = Infinity;
+
+    for(let i = butterflies.length-1; i >= 0; i--) {
+      const b = butterflies[i];
+      b.age++;
+
+      /* Tick down cooldown */
+      if(b.cooldown > 0) b.cooldown--;
+
+      /* Fade in */
+      if(b.fadeIn) {
+        b.opacity = Math.min(0.6, b.opacity + 0.008);
+        if(b.opacity >= 0.55) b.fadeIn = false;
+      }
+
+      /* Remove butterflies that have drifted off screen */
+      const offMargin = 120;
+      if(b.state === 'wander' && (b.x < -offMargin || b.x > w+offMargin || b.y < -offMargin || b.y > h+offMargin)) {
+        b.el.remove();
+        if(landedButterfly === b) landedButterfly = null;
+        butterflies.splice(i, 1);
+        continue;
+      }
+
+      /* Distance to mouse */
+      const dx = mouse.x - b.x;
+      const dy = mouse.y - b.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      /* ── State transitions ── */
+      if(b.state === 'landed' && justMoved) {
+        b.state = 'scattering';
+        const angle = Math.atan2(b.y - mouse.y, b.x - mouse.x) + (Math.random()-0.5)*0.8;
+        b.scatterVx = Math.cos(angle) * SCATTER_SPEED;
+        b.scatterVy = Math.sin(angle) * SCATTER_SPEED;
+        b.el.classList.remove('landed');
+        landedButterfly = null;
+        b.cooldown = SCATTER_COOLDOWN;
+      }
+      else if(b.state === 'orbiting' && justMoved) {
+        b.state = 'scattering';
+        const angle = Math.atan2(b.y - mouse.y, b.x - mouse.x) + (Math.random()-0.5)*1.0;
+        b.scatterVx = Math.cos(angle) * SCATTER_SPEED * (0.6 + Math.random()*0.4);
+        b.scatterVy = Math.sin(angle) * SCATTER_SPEED * (0.6 + Math.random()*0.4);
+        b.cooldown = SCATTER_COOLDOWN;
+      }
+      else if(b.state === 'attracted' && justMoved && dist < ATTRACT_RADIUS) {
+        b.state = 'scattering';
+        const angle = Math.atan2(b.y - mouse.y, b.x - mouse.x) + (Math.random()-0.5)*1.2;
+        b.scatterVx = Math.cos(angle) * SCATTER_SPEED * (0.4 + Math.random()*0.3);
+        b.scatterVy = Math.sin(angle) * SCATTER_SPEED * (0.4 + Math.random()*0.3);
+        b.cooldown = SCATTER_COOLDOWN;
+      }
+      else if(b.state === 'scattering') {
+        b.scatterVx *= SCATTER_DECAY;
+        b.scatterVy *= SCATTER_DECAY;
+        if(Math.abs(b.scatterVx) < 0.15 && Math.abs(b.scatterVy) < 0.15) {
+          b.state = 'wander';
+          b.wanderAngle = Math.atan2(b.vy, b.vx) || Math.random() * Math.PI * 2;
+        }
+      }
+      else if(b.state === 'wander' && mouse.active && dist < ATTRACT_RADIUS && b.cooldown <= 0) {
+        b.state = 'attracted';
+      }
+      else if(b.state === 'attracted' && (!mouse.active || dist > ATTRACT_RADIUS * 1.5)) {
+        b.state = 'wander';
+        b.wanderAngle = Math.atan2(b.vy, b.vx) || Math.random() * Math.PI * 2;
+      }
+      else if(b.state === 'attracted' && mouse.still && dist < ORBIT_RADIUS + 40) {
+        b.state = 'orbiting';
+        b.orbitAngle = Math.atan2(b.y - mouse.y, b.x - mouse.x);
+        b.orbitDist = Math.max(ORBIT_RADIUS, dist);
+      }
+      else if(b.state === 'orbiting' && !mouse.active) {
+        b.state = 'wander';
+        b.wanderAngle = b.orbitAngle;
+      }
+      else if(b.state === 'orbiting' && !mouse.still) {
+        // Mouse started moving gently — release to wander, don't scatter
+        b.state = 'wander';
+        b.wanderAngle = b.orbitAngle;
+        b.cooldown = SCATTER_COOLDOWN;
+      }
+
+      /* Track closest orbiting for landing */
+      if(b.state === 'orbiting' && dist < closestDist && landedButterfly === null && mouse.still && mouse.stillTime > 120) {
+        closestDist = dist;
+        closestAttracted = b;
+      }
+
+      /* ── Movement by state ── */
+      switch(b.state) {
+        case 'wander': {
+          b.wanderAngle += (Math.random()-0.5) * b.wanderRate * 2;
+          b.vx += Math.cos(b.wanderAngle) * 0.03;
+          b.vy += Math.sin(b.wanderAngle) * 0.03;
+          const spd = Math.sqrt(b.vx*b.vx + b.vy*b.vy);
+          if(spd > b.baseSpeed) { b.vx *= 0.96; b.vy *= 0.96; }
+          b.x += b.vx;
+          b.y += b.vy;
+          break;
+        }
+        case 'attracted': {
+          const angle = Math.atan2(dy, dx);
+          // Stronger pull when far, weaker when close — prevents overshoot
+          const pullStrength = Math.min(0.05, dist * 0.0003);
+          b.vx += Math.cos(angle) * pullStrength;
+          b.vy += Math.sin(angle) * pullStrength;
+          // Dampen to prevent oscillation
+          b.vx *= 0.97;
+          b.vy *= 0.97;
+          const spd = Math.sqrt(b.vx*b.vx + b.vy*b.vy);
+          const maxSpd = b.baseSpeed * 1.6;
+          if(spd > maxSpd) { b.vx *= maxSpd/spd; b.vy *= maxSpd/spd; }
+          b.x += b.vx;
+          b.y += b.vy;
+          break;
+        }
+        case 'orbiting': {
+          // Smooth consistent orbit — no random jitter per frame
+          b.orbitAngle += 0.012;
+          const targetX = mouse.x + Math.cos(b.orbitAngle) * b.orbitDist;
+          const targetY = mouse.y + Math.sin(b.orbitAngle) * b.orbitDist;
+          b.x += (targetX - b.x) * 0.035;
+          b.y += (targetY - b.y) * 0.035;
+          // Slowly tighten orbit
+          if(b.orbitDist > ORBIT_RADIUS) b.orbitDist -= 0.05;
+          b.vx = b.x - (b.x - (targetX - b.x) * 0.035);
+          b.vy = b.y - (b.y - (targetY - b.y) * 0.035);
+          break;
+        }
+        case 'landed': {
+          // Rest near cursor — slightly above, with gentle bob
+          const targetLandX = mouse.x + 8;
+          const targetLandY = mouse.y - b.size * 0.5;
+          const bobY = Math.sin(b.age * 0.025) * 0.8;
+          b.x += (targetLandX - b.x) * 0.08;
+          b.y += (targetLandY + bobY - b.y) * 0.08;
+          b.vx = 0; b.vy = 0;
+          break;
+        }
+        case 'scattering': {
+          b.x += b.scatterVx;
+          b.y += b.scatterVy;
+          b.vx = b.scatterVx;
+          b.vy = b.scatterVy;
+          break;
+        }
+      }
+
+      /* Calculate rotation from velocity */
+      const rot = b.state === 'landed' ? 0 : Math.atan2(b.vy, b.vx) * (180/Math.PI) * 0.15;
+
+      /* Apply transform */
+      b.el.style.transform = `translate(${b.x - b.size/2}px, ${b.y - b.size/2}px) rotate(${rot}deg)`;
+      b.el.style.opacity = b.opacity;
+    }
+
+    /* Land the closest butterfly on cursor */
+    if(closestAttracted && landedButterfly === null && mouse.still && mouse.stillTime > 100) {
+      closestAttracted.state = 'landed';
+      closestAttracted.el.classList.add('landed');
+      landedButterfly = closestAttracted;
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+
+  /* ─── Sparkle cursor (non-touch only) ─── */
+  if(hasMouse) {
+    const colors = ['#c9a7e4','#f2a7c3','#7fb8e0','#ffffff','#e8c8f8'];
+    let lastSparkle = 0;
+    document.addEventListener('mousemove', e => {
+      const now = Date.now();
+      if(now - lastSparkle < 45) return;
+      lastSparkle = now;
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      const sz = 3 + Math.random()*5;
+      s.style.width = sz+'px';
+      s.style.height = sz+'px';
+      s.style.left = (e.clientX - sz/2) + 'px';
+      s.style.top = (e.clientY - sz/2) + 'px';
+      s.style.background = colors[Math.floor(Math.random()*colors.length)];
+      s.style.setProperty('--sx', (Math.random()-0.5)*24+'px');
+      s.style.setProperty('--sy', (Math.random()-0.5)*24+'px');
+      s.style.boxShadow = `0 0 ${4+Math.random()*4}px ${s.style.background}`;
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 600);
+    });
+  }
+
+  /* ─── Validation & Submit ─── */
+  const form = document.getElementById('contactForm');
+  const nameIn = document.getElementById('name');
+  const emailIn = document.getElementById('email');
+  const msgIn = document.getElementById('message');
+  const btn = document.getElementById('submitBtn');
+  const serverError = document.getElementById('serverError');
+  const charUsed = document.getElementById('charUsed');
+
+  msgIn.addEventListener('input', () => {
+    charUsed.textContent = msgIn.value.length;
+    charUsed.parentElement.classList.toggle('warn', msgIn.value.length >= 1160);
+  });
+
+  function showErr(input, errId, show) {
+    document.getElementById(errId).classList.toggle('show', show);
+    input.classList.toggle('invalid', show);
+  }
+
+  function validate() {
+    let ok = true;
+    if(!nameIn.value.trim()) { showErr(nameIn,'nameError',true); ok=false; } else showErr(nameIn,'nameError',false);
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailRe.test(emailIn.value.trim())) { showErr(emailIn,'emailError',true); ok=false; } else showErr(emailIn,'emailError',false);
+    if(!msgIn.value.trim()) { showErr(msgIn,'messageError',true); ok=false; } else showErr(msgIn,'messageError',false);
+    return ok;
+  }
+
+  [nameIn, emailIn, msgIn].forEach(el => {
+    el.addEventListener('input', () => {
+      el.classList.remove('invalid');
+      const errEl = document.getElementById(el.id+'Error');
+      if(errEl) errEl.classList.remove('show');
+    });
+  });
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    serverError.classList.remove('show');
+    if(!validate()) return;
+
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    try {
+      const data = new FormData(form);
+      const resp = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if(resp.ok) {
+        window.location.href = document.querySelector('input[name="_next"]').value;
+      } else {
+        throw new Error('Non-2xx response');
+      }
+    } catch(err) {
+      serverError.classList.add('show');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
