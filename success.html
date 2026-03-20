@@ -96,6 +96,7 @@
 
 
   /* ─── Card ─── */
+  /* ─── Card ─── */
   .card {
     width: 100%;
     max-width: 520px;
@@ -170,9 +171,24 @@
     font-size: 0.95rem;
     color: var(--text-light);
     line-height: 1.65;
-    max-width: 380px;
+    max-width: 420px;
     margin: 0 auto 2rem;
   }
+
+  .phone-line {
+    margin-top: -0.8rem;
+    font-size: 0.88rem;
+  }
+
+  .phone-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .phone-link:hover { color: var(--blue-deep); }
 
   .back-link {
     display: inline-block;
@@ -226,20 +242,202 @@
     body { padding: 1rem 0.5rem; }
     .card { padding: 2rem 1.1rem; }
   }
+  /* ─── Flowers ─── */
+  .flowers-container {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .flower {
+    position: absolute;
+    transition: transform 0.3s ease;
+  }
+  .flower svg {
+    animation: flowerSway 4s ease-in-out infinite alternate;
+    transform-origin: bottom center;
+  }
+  .flower:nth-child(2n) svg { animation-duration: 5s; animation-delay: -1s; }
+  .flower:nth-child(3n) svg { animation-duration: 3.5s; animation-delay: -2s; }
+  @keyframes flowerSway {
+    0%   { transform: rotate(-3deg); }
+    100% { transform: rotate(3deg); }
+  }
+
+  /* ─── Butterfly Net Game (desktop only) ─── */
+  .net-game { display: none; }
+
+  @media (pointer: fine) and (min-height: 700px) and (min-width: 600px) {
+    .net-game {
+      display: block;
+      position: fixed;
+      bottom: 3.8rem;
+      right: 1.2rem;
+      z-index: 50;
+      text-align: right;
+    }
+  }
+
+  .net-btn {
+    display: inline-block;
+    padding: 0.7rem 1.8rem;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--blue-deep) 0%, var(--accent) 55%, var(--pink) 100%);
+    background-size: 200% 200%;
+    animation: gradShift 6s ease infinite;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(161,127,199,0.3);
+    transition: all 0.25s;
+  }
+
+  .net-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(161,127,199,0.4);
+  }
+
+  .net-btn.active {
+    background: linear-gradient(135deg, var(--blue-deep) 0%, var(--accent) 55%, var(--pink) 100%);
+    background-size: 200% 200%;
+    animation: gradShift 6s ease infinite;
+    color: var(--white);
+    border-color: transparent;
+  }
+
+  .net-score {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .net-score.visible { opacity: 1; }
+
+  /* Custom net cursor */
+  body.net-mode { cursor: none !important; }
+  body.net-mode * { cursor: none !important; }
+
+  .net-cursor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    display: none;
+    transform: translate(-20px, -20px);
+  }
+
+  body.net-mode .net-cursor { display: block; }
+
+  /* Caught butterfly wiggles */
+  .butterfly.caught svg {
+    animation: caughtWiggle 0.3s ease-in-out infinite alternate !important;
+  }
+  @keyframes caughtWiggle {
+    0%   { transform: scaleX(0.7) rotate(-8deg); }
+    100% { transform: scaleX(0.9) rotate(8deg); }
+  }
+
+  /* Net hint tooltip */
+  .net-hint {
+    position: fixed;
+    bottom: 7rem;
+    right: 1.2rem;
+    z-index: 50;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(161,127,199,0.25);
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text);
+    box-shadow: 0 4px 16px rgba(90,60,130,0.12);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s;
+    pointer-events: none;
+  }
+
+  .net-hint.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── Demo Banner ─── */
+  .demo-banner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 50%, var(--blue) 100%);
+    background-size: 200% 200%;
+    animation: gradShift 6s ease infinite;
+    color: var(--white);
+    text-align: center;
+    padding: 0.5rem 1rem;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .demo-banner.top { top: 0; }
+  .demo-banner.bottom { bottom: 0; }
+  .demo-banner span { font-weight: 300; font-style: italic; }
+
+  body { padding-top: 3.2rem; padding-bottom: 3.2rem; }
 </style>
 </head>
 <body>
 
+<div class="demo-banner top">This is a demo — not a live form. <span>But it is the bestest, most amazingest contact form in the entire world. I hope you enjoy, Andie &#10084;&#65039;</span></div>
+
 <div class="creatures" id="creatures"></div>
+<div class="flowers-container" id="flowers"></div>
 
 <div class="card">
   <div class="check-ring">
     <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
   </div>
   <h1 class="brand">Papillon Center</h1>
-  <h2 class="heading">Message Sent</h2>
-  <p class="msg">Thank you for reaching out! We've received your message and will be in touch soon.</p>
-  <a href="index.html" class="back-link">Back to Contact</a>
+  <h2 class="heading">You've Taken a Beautiful Step</h2>
+  <p class="msg">Your message is on its way to our team — we're honored you chose to reach out. This is the beginning of something wonderful, and we can't wait to be part of your journey. We'll be in touch soon!</p>
+  <p class="msg phone-line">If you'd like to talk to us directly, we're always happy to hear from you — give us a call at <a href="tel:+12156931199" class="phone-link">(215) 693-1199</a></p>
+</div>
+
+<div class="net-game">
+  <button class="net-btn" id="netBtn">Wanna Catch Some Butterflies?</button>
+  <div class="net-score" id="netScore">Caught: <span id="netCount">0</span></div>
+</div>
+<div class="net-hint" id="netHint">Click anywhere to release them!</div>
+
+<!-- Net cursor -->
+<div class="net-cursor" id="netCursor">
+  <svg width="48" height="64" viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Handle -->
+    <line x1="24" y1="36" x2="24" y2="62" stroke="#8a7a66" stroke-width="3" stroke-linecap="round"/>
+    <!-- Rim -->
+    <ellipse cx="24" cy="18" rx="18" ry="16" stroke="#a89478" stroke-width="2.5" fill="none"/>
+    <!-- Net mesh -->
+    <path d="M8 22 Q16 40 24 42 Q32 40 40 22" stroke="rgba(161,127,199,0.35)" stroke-width="0.8" fill="rgba(201,167,228,0.08)"/>
+    <path d="M11 20 Q17 34 24 36 Q31 34 37 20" stroke="rgba(161,127,199,0.25)" stroke-width="0.5" fill="none"/>
+    <path d="M14 18 Q19 28 24 30 Q29 28 34 18" stroke="rgba(161,127,199,0.2)" stroke-width="0.5" fill="none"/>
+    <!-- Cross threads -->
+    <line x1="16" y1="18" x2="20" y2="38" stroke="rgba(161,127,199,0.15)" stroke-width="0.5"/>
+    <line x1="24" y1="16" x2="24" y2="42" stroke="rgba(161,127,199,0.15)" stroke-width="0.5"/>
+    <line x1="32" y1="18" x2="28" y2="38" stroke="rgba(161,127,199,0.15)" stroke-width="0.5"/>
+  </svg>
+</div>
+
 </div>
 
 <script>
@@ -281,83 +479,149 @@
     document.addEventListener('mouseleave', () => { mouse.active = false; mouse.still = false; });
   }
 
+  /* ─── Flowers ─── */
+  const flowersEl = document.getElementById('flowers');
+  const flowers = [];
+
+  function makeSVGFlower(petalHue, centerHue, size) {
+    const pc=`hsla(${petalHue},65%,75%,0.7)`,pc2=`hsla(${petalHue+15},55%,80%,0.6)`;
+    const cc=`hsla(${centerHue},60%,65%,0.8)`,stem=`hsla(130,35%,50%,0.5)`,leaf=`hsla(130,40%,55%,0.45)`;
+    return `<svg width="${size}" height="${size*1.8}" viewBox="0 0 40 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="28" x2="20" y2="70" stroke="${stem}" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse cx="12" cy="50" rx="6" ry="3.5" fill="${leaf}" transform="rotate(-30 12 50)"/>
+      <ellipse cx="28" cy="55" rx="5.5" ry="3" fill="${leaf}" transform="rotate(25 28 55)"/>
+      <ellipse cx="20" cy="11" rx="5.5" ry="9" fill="${pc}" transform="rotate(0 20 11)"/>
+      <ellipse cx="20" cy="11" rx="5.5" ry="9" fill="${pc2}" transform="rotate(60 20 16)"/>
+      <ellipse cx="20" cy="11" rx="5.5" ry="9" fill="${pc}" transform="rotate(120 20 16)"/>
+      <ellipse cx="20" cy="11" rx="5.5" ry="9" fill="${pc2}" transform="rotate(180 20 16)"/>
+      <ellipse cx="20" cy="11" rx="5.5" ry="9" fill="${pc}" transform="rotate(240 20 16)"/>
+      <ellipse cx="20" cy="11" rx="5.5" ry="9" fill="${pc2}" transform="rotate(300 20 16)"/>
+      <circle cx="20" cy="16" r="4.5" fill="${cc}"/>
+    </svg>`;
+  }
+
+  function positionFlowers() {
+    flowersEl.innerHTML=''; flowers.length=0;
+    const card=document.querySelector('.card'), rect=card.getBoundingClientRect();
+    const spots=[
+      {x:rect.left-30,y:rect.bottom-20},{x:rect.left+15,y:rect.bottom+15},
+      {x:rect.right-15,y:rect.bottom+15},{x:rect.right+25,y:rect.bottom-30},
+      {x:rect.left-35,y:rect.top+rect.height*0.5},{x:rect.right+30,y:rect.top+rect.height*0.4},
+      {x:rect.left+rect.width*0.3,y:rect.bottom+10},{x:rect.left+rect.width*0.7,y:rect.bottom+10},
+    ];
+    const petalHues=[320,330,210,280,340,200,290,310];
+    spots.forEach((spot,i)=>{
+      const el=document.createElement('div'); el.classList.add('flower');
+      const size=24+Math.random()*14;
+      el.innerHTML=makeSVGFlower(petalHues[i%petalHues.length]+Math.random()*20-10,40+Math.random()*20,size);
+      el.style.left=(spot.x-size/2)+'px'; el.style.top=(spot.y-size*0.5)+'px';
+      flowersEl.appendChild(el);
+      flowers.push({el,x:spot.x,y:spot.y-size*0.3,size,occupant:null});
+    });
+  }
+  positionFlowers();
+  let resizeTimer;
+  window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{positionFlowers();butterflies.forEach(b=>{if(b.state==='flower_resting'){b.state='wander';b.el.classList.remove('landed');b.wanderAngle=Math.random()*Math.PI*2;}b.targetFlower=null;});},200);});
+
   const butterflies = [];
-  const MAX_BUTTERFLIES = 14;
+  const MAX_BUTTERFLIES = 22;
   const ATTRACT_RADIUS = 160;
   const SCATTER_SPEED = 4;
   const SCATTER_DECAY = 0.95;
-  const ORBIT_RADIUS = 40;
-  const SCATTER_COOLDOWN = 180;
+  const ORBIT_RADIUS = 22;
+  const SCATTER_COOLDOWN = 120;
 
   function createButterfly() {
-    const el = document.createElement('div');
-    el.classList.add('creature', 'butterfly');
-    const size = 28 + Math.random()*22;
-    const h1 = Math.random()>0.5 ? 210+Math.random()*30 : 320+Math.random()*30;
-    const h2 = Math.random()>0.5 ? 320+Math.random()*30 : 210+Math.random()*30;
-    el.innerHTML = makeSVGButterfly(h1, h2, size);
-    el.querySelector('svg').style.animationDuration = (0.3 + Math.random()*0.3) + 's';
-    el.style.opacity = '0';
-    creaturesEl.appendChild(el);
-    const b = {
-      el, x: Math.random()*W(), y: Math.random()*H(),
-      vx: (Math.random()-0.5)*0.6, vy: (Math.random()-0.5)*0.6,
-      baseSpeed: 0.2+Math.random()*0.35, wanderAngle: Math.random()*Math.PI*2,
-      wanderRate: 0.01+Math.random()*0.02, opacity: 0, fadeIn: true, age: 0,
-      lifetime: (20+Math.random()*18)*60, state: 'wander',
-      scatterVx: 0, scatterVy: 0, orbitAngle: Math.random()*Math.PI*2,
-      orbitDist: ORBIT_RADIUS+Math.random()*20, cooldown: 0, size
-    };
-    butterflies.push(b);
-    return b;
+    const el=document.createElement('div'); el.classList.add('creature','butterfly');
+    const size=28+Math.random()*22;
+    const h1=Math.random()>0.5?210+Math.random()*30:320+Math.random()*30;
+    const h2=Math.random()>0.5?320+Math.random()*30:210+Math.random()*30;
+    el.innerHTML=makeSVGButterfly(h1,h2,size);
+    el.querySelector('svg').style.animationDuration=(0.3+Math.random()*0.3)+'s';
+    el.style.opacity='0'; creaturesEl.appendChild(el);
+    const b={el,x:Math.random()*W(),y:Math.random()*H(),
+      vx:(Math.random()-0.5)*0.6,vy:(Math.random()-0.5)*0.6,
+      baseSpeed:0.2+Math.random()*0.35,wanderAngle:Math.random()*Math.PI*2,
+      wanderRate:0.01+Math.random()*0.02,opacity:0,fadeIn:true,age:0,
+      state:'wander',scatterVx:0,scatterVy:0,orbitAngle:Math.random()*Math.PI*2,
+      orbitDist:ORBIT_RADIUS+Math.random()*10,cooldown:0,
+      targetFlower:null,flowerRestTime:0,flowerRestDuration:0,size};
+    butterflies.push(b); return b;
   }
 
-  for(let i=0;i<10;i++) { const b=createButterfly(); b.age=Math.random()*b.lifetime*0.5; b.opacity=0.55; b.fadeIn=false; }
-  let spawnTimer = 0, landedButterfly = null;
-  const MIN_BUTTERFLIES = 3;
+  for(let i=0;i<16;i++){const b=createButterfly();b.opacity=0.55;b.fadeIn=false;}
+  let spawnTimer=0;
+  const MAX_CURSOR_LANDED=3;
+  const MIN_BUTTERFLIES=5;
+  let mouseCooldown=0;
 
-  function tick() {
-    const w=W(), h=H();
+  function tick(){
+    const w=W(),h=H();
     if(hasMouse&&mouse.active){if(mouse.speed<0.5){mouse.stillTime++;if(mouse.stillTime>40)mouse.still=true;}else{mouse.still=false;mouse.stillTime=0;}}
-    const justMoved=mouse.speed>3&&mouse.active;
+    if(mouseCooldown>0)mouseCooldown--;
+    const justMoved=mouse.speed>6&&mouse.active;
+    if(justMoved)mouseCooldown=180;
     spawnTimer++;
-    const needMore=butterflies.length<MIN_BUTTERFLIES;
-    if((spawnTimer>180||needMore)&&butterflies.length<MAX_BUTTERFLIES){
-      spawnTimer=0;const nb=createButterfly();
-      const edge=Math.floor(Math.random()*4);
-      if(edge===0){nb.x=-30;nb.y=Math.random()*h;}else if(edge===1){nb.x=w+30;nb.y=Math.random()*h;}else if(edge===2){nb.y=-30;nb.x=Math.random()*w;}else{nb.y=h+30;nb.x=Math.random()*w;}
+    if((spawnTimer>140||butterflies.length<MIN_BUTTERFLIES)&&butterflies.length<MAX_BUTTERFLIES){
+      spawnTimer=0;const nb=createButterfly();const edge=Math.floor(Math.random()*4);
+      if(edge===0){nb.x=-30;nb.y=Math.random()*h;}else if(edge===1){nb.x=w+30;nb.y=Math.random()*h;}
+      else if(edge===2){nb.y=-30;nb.x=Math.random()*w;}else{nb.y=h+30;nb.x=Math.random()*w;}
     }
     let closestAttracted=null,closestDist=Infinity;
     for(let i=butterflies.length-1;i>=0;i--){
       const b=butterflies[i];b.age++;
       if(b.cooldown>0)b.cooldown--;
       if(b.fadeIn){b.opacity=Math.min(0.6,b.opacity+0.008);if(b.opacity>=0.55)b.fadeIn=false;}
-      const offM=120;if(b.state==='wander'&&(b.x<-offM||b.x>w+offM||b.y<-offM||b.y>h+offM)){b.el.remove();if(landedButterfly===b)landedButterfly=null;butterflies.splice(i,1);continue;}
+      const offM=120;if(b.state==='wander'&&(b.x<-offM||b.x>w+offM||b.y<-offM||b.y>h+offM)){b.el.remove();if(b.targetFlower&&b.targetFlower.occupant===b)b.targetFlower.occupant=null;butterflies.splice(i,1);continue;}
       const dx=mouse.x-b.x,dy=mouse.y-b.y,dist=Math.sqrt(dx*dx+dy*dy);
-      if(b.state==='landed'&&justMoved){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*0.8;b.scatterVx=Math.cos(a)*SCATTER_SPEED;b.scatterVy=Math.sin(a)*SCATTER_SPEED;b.el.classList.remove('landed');landedButterfly=null;b.cooldown=SCATTER_COOLDOWN;}
-      else if(b.state==='orbiting'&&justMoved){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*1.0;b.scatterVx=Math.cos(a)*SCATTER_SPEED*(0.6+Math.random()*0.4);b.scatterVy=Math.sin(a)*SCATTER_SPEED*(0.6+Math.random()*0.4);b.cooldown=SCATTER_COOLDOWN;}
-      else if(b.state==='attracted'&&justMoved&&dist<ATTRACT_RADIUS){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*1.2;b.scatterVx=Math.cos(a)*SCATTER_SPEED*(0.4+Math.random()*0.3);b.scatterVy=Math.sin(a)*SCATTER_SPEED*(0.4+Math.random()*0.3);b.cooldown=SCATTER_COOLDOWN;}
+
+      if(b.state==='caught'){
+        /* Caught butterflies are handled by netTick — skip all state/movement logic */
+      }
+      else if(b.state==='flower_resting'){
+        b.flowerRestTime++;
+        if(b.flowerRestTime>=b.flowerRestDuration){b.state='wander';b.el.classList.remove('landed');b.wanderAngle=Math.random()*Math.PI*2;if(b.targetFlower)b.targetFlower.occupant=null;b.targetFlower=null;}
+        else if(mouse.active&&dist<80){b.state='wander';b.el.classList.remove('landed');b.wanderAngle=Math.atan2(b.y-mouse.y,b.x-mouse.x);if(b.targetFlower)b.targetFlower.occupant=null;b.targetFlower=null;}
+      }
+      else if(b.state==='landed'&&justMoved){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*0.6;const burst=SCATTER_SPEED*2.5;b.scatterVx=Math.cos(a)*burst;b.scatterVy=Math.sin(a)*burst;b.el.classList.remove('landed');b.cooldown=SCATTER_COOLDOWN;}
+      else if(b.state==='landed'){b.landedTime=(b.landedTime||0)+1;if(b.landedTime>180+Math.random()*240){b.state='wander';b.el.classList.remove('landed');b.wanderAngle=Math.random()*Math.PI*2;b.landedTime=0;}}
+      else if(b.state==='orbiting'&&justMoved){b.state='scattering';const a=Math.atan2(b.y-mouse.y,b.x-mouse.x)+(Math.random()-0.5)*0.9;const burst=SCATTER_SPEED*1.8;b.scatterVx=Math.cos(a)*burst;b.scatterVy=Math.sin(a)*burst;b.cooldown=SCATTER_COOLDOWN;}
+      
       else if(b.state==='scattering'){b.scatterVx*=SCATTER_DECAY;b.scatterVy*=SCATTER_DECAY;if(Math.abs(b.scatterVx)<0.15&&Math.abs(b.scatterVy)<0.15){b.state='wander';b.wanderAngle=Math.atan2(b.vy,b.vx)||Math.random()*Math.PI*2;}}
-      else if(b.state==='wander'&&mouse.active&&dist<ATTRACT_RADIUS&&b.cooldown<=0)b.state='attracted';
+      else if(b.state==='wander'&&mouse.active&&dist<ATTRACT_RADIUS&&b.cooldown<=0&&mouseCooldown<=0){b.state='attracted';b.targetFlower=null;}
       else if(b.state==='attracted'&&(!mouse.active||dist>ATTRACT_RADIUS*1.5)){b.state='wander';b.wanderAngle=Math.atan2(b.vy,b.vx)||Math.random()*Math.PI*2;}
-      else if(b.state==='attracted'&&mouse.still&&dist<ORBIT_RADIUS+40){b.state='orbiting';b.orbitAngle=Math.atan2(b.y-mouse.y,b.x-mouse.x);b.orbitDist=Math.max(ORBIT_RADIUS,dist);}
+      else if(b.state==='attracted'&&mouse.still&&dist<ORBIT_RADIUS+50){b.state='orbiting';b.orbitAngle=Math.atan2(b.y-mouse.y,b.x-mouse.x);b.orbitDist=Math.max(ORBIT_RADIUS,dist);}
       else if(b.state==='orbiting'&&!mouse.active){b.state='wander';b.wanderAngle=b.orbitAngle;}
       else if(b.state==='orbiting'&&!mouse.still){b.state='wander';b.wanderAngle=b.orbitAngle;b.cooldown=SCATTER_COOLDOWN;}
-      if(b.state==='orbiting'&&dist<closestDist&&landedButterfly===null&&mouse.still&&mouse.stillTime>120){closestDist=dist;closestAttracted=b;}
+      else if(b.state==='wander'&&!b.targetFlower&&b.cooldown<=0&&Math.random()<0.002){const av=flowers.filter(f=>!f.occupant);if(av.length>0)b.targetFlower=av[Math.floor(Math.random()*av.length)];}
+
+      if(b.state==='orbiting'&&dist<closestDist&&mouse.still&&mouse.stillTime>90){closestDist=dist;closestAttracted=b;}
+
       switch(b.state){
-        case 'wander':{b.wanderAngle+=(Math.random()-0.5)*b.wanderRate*2;b.vx+=Math.cos(b.wanderAngle)*0.03;b.vy+=Math.sin(b.wanderAngle)*0.03;const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy);if(s>b.baseSpeed){b.vx*=0.96;b.vy*=0.96;}b.x+=b.vx;b.y+=b.vy;break;}
-        case 'attracted':{const a=Math.atan2(dy,dx);const p=Math.min(0.05,dist*0.0003);b.vx+=Math.cos(a)*p;b.vy+=Math.sin(a)*p;b.vx*=0.97;b.vy*=0.97;const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy),ms=b.baseSpeed*1.6;if(s>ms){b.vx*=ms/s;b.vy*=ms/s;}b.x+=b.vx;b.y+=b.vy;break;}
+        case 'caught': break; /* handled by netTick */
+        case 'wander':{
+          if(b.targetFlower){const fdx=b.targetFlower.x-b.x,fdy=b.targetFlower.y-b.y,fd=Math.sqrt(fdx*fdx+fdy*fdy);
+            if(fd<12){b.state='flower_resting';b.el.classList.add('landed');b.targetFlower.occupant=b;b.flowerRestTime=0;b.flowerRestDuration=180+Math.random()*360;b.vx=0;b.vy=0;}
+            else{const fa=Math.atan2(fdy,fdx),fp=Math.min(0.04,fd*0.0004);b.vx+=Math.cos(fa)*fp;b.vy+=Math.sin(fa)*fp;b.vx*=0.97;b.vy*=0.97;const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy),ms=b.baseSpeed*1.4;if(s>ms){b.vx*=ms/s;b.vy*=ms/s;}b.x+=b.vx;b.y+=b.vy;}
+          }else{b.wanderAngle+=(Math.random()-0.5)*b.wanderRate*2;b.vx+=Math.cos(b.wanderAngle)*0.03;b.vy+=Math.sin(b.wanderAngle)*0.03;const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy);if(s>b.baseSpeed){b.vx*=0.96;b.vy*=0.96;}b.x+=b.vx;b.y+=b.vy;}
+          break;}
+        case 'attracted':{const a=Math.atan2(dy,dx),p=Math.min(0.05,dist*0.0003);b.vx+=Math.cos(a)*p;b.vy+=Math.sin(a)*p;b.vx*=0.97;b.vy*=0.97;const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy),ms=b.baseSpeed*1.6;if(s>ms){b.vx*=ms/s;b.vy*=ms/s;}b.x+=b.vx;b.y+=b.vy;break;}
         case 'orbiting':{b.orbitAngle+=0.012;const tx=mouse.x+Math.cos(b.orbitAngle)*b.orbitDist,ty=mouse.y+Math.sin(b.orbitAngle)*b.orbitDist;b.x+=(tx-b.x)*0.035;b.y+=(ty-b.y)*0.035;if(b.orbitDist>ORBIT_RADIUS)b.orbitDist-=0.05;b.vx=(tx-b.x)*0.035;b.vy=(ty-b.y)*0.035;break;}
-        case 'landed':{const tX=mouse.x+8,tY=mouse.y-b.size*0.5;const by=Math.sin(b.age*0.025)*0.8;b.x+=(tX-b.x)*0.08;b.y+=(tY+by-b.y)*0.08;b.vx=0;b.vy=0;break;}
+        case 'landed':{const li=butterflies.indexOf(b),offX=Math.sin(li*2.1)*12,offY=Math.cos(li*1.7)*8;const tX=mouse.x+offX,tY=mouse.y-b.size*0.4+offY,by=Math.sin(b.age*0.025)*0.6;b.x+=(tX-b.x)*0.08;b.y+=(tY+by-b.y)*0.08;b.vx=0;b.vy=0;break;}
+        case 'flower_resting':{if(b.targetFlower){const by=Math.sin(b.age*0.02)*0.6;b.x+=(b.targetFlower.x-b.x)*0.1;b.y+=(b.targetFlower.y+by-b.y)*0.1;}b.vx=0;b.vy=0;break;}
         case 'scattering':{b.x+=b.scatterVx;b.y+=b.scatterVy;b.vx=b.scatterVx;b.vy=b.scatterVy;break;}
       }
-      const rot=b.state==='landed'?0:Math.atan2(b.vy,b.vx)*(180/Math.PI)*0.15;
+      if(b.state!=='landed'&&b.state!=='flower_resting'&&b.state!=='caught'){for(let j=0;j<butterflies.length;j++){if(j===i)continue;const o=butterflies[j];const sx=b.x-o.x,sy=b.y-o.y,sd=Math.sqrt(sx*sx+sy*sy);if(sd<35&&sd>0.1){const push=0.15*(1-sd/35);b.x+=sx/sd*push;b.y+=sy/sd*push;}}}
+      const rot=(b.state==='landed'||b.state==='flower_resting'||b.state==='caught')?0:Math.atan2(b.vy,b.vx)*(180/Math.PI)*0.15;
       b.el.style.transform=`translate(${b.x-b.size/2}px, ${b.y-b.size/2}px) rotate(${rot}deg)`;
       b.el.style.opacity=b.opacity;
     }
-    if(closestAttracted&&landedButterfly===null&&mouse.still&&mouse.stillTime>120){closestAttracted.state='landed';closestAttracted.el.classList.add('landed');landedButterfly=closestAttracted;}
+    const cursorLanded=butterflies.filter(b=>b.state==='landed').length;
+    if(closestAttracted&&cursorLanded<MAX_CURSOR_LANDED&&mouse.still&&mouse.stillTime>90){closestAttracted.state='landed';closestAttracted.el.classList.add('landed');closestAttracted.landedTime=0;}
     requestAnimationFrame(tick);
   }
+  requestAnimationFrame(tick);
+
   requestAnimationFrame(tick);
 
   if(hasMouse) {
@@ -381,7 +645,114 @@
     });
   }
 
+  /* ─── Butterfly Net Game ─── */
+  const netBtn = document.getElementById('netBtn');
+  const netCursor = document.getElementById('netCursor');
+  const netScoreEl = document.getElementById('netScore');
+  const netCountEl = document.getElementById('netCount');
+  let netMode = false;
+  let totalCaught = 0;
+  const caughtButterflies = [];
+  const NET_CATCH_RADIUS = 30;
+  let hintShown = false;
+  const netHint = document.getElementById('netHint');
+
+  if(netBtn) {
+    netBtn.addEventListener('click', (e) => {
+      netMode = !netMode;
+      document.body.classList.toggle('net-mode', netMode);
+      netBtn.classList.toggle('active', netMode);
+      netBtn.textContent = netMode ? 'Put Net Away' : 'Wanna Catch Some Butterflies?';
+      netScoreEl.classList.toggle('visible', netMode);
+      if(netMode) {
+        netCursor.style.left = e.clientX + 'px';
+        netCursor.style.top = e.clientY + 'px';
+      }
+    });
+
+    // Move net cursor
+    document.addEventListener('mousemove', e => {
+      if(!netMode) return;
+      netCursor.style.left = e.clientX + 'px';
+      netCursor.style.top = e.clientY + 'px';
+
+      // Check if net sweeps over any butterfly
+      for(const b of butterflies) {
+        if(b.state === 'caught' || b.state === 'flower_resting') continue;
+        if(b.netImmune && b.netImmune > Date.now()) continue;
+        const dx = e.clientX - b.x;
+        const dy = e.clientY - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < NET_CATCH_RADIUS) {
+          // Catch this butterfly!
+          b.state = 'caught';
+          b.el.classList.remove('landed');
+          b.el.classList.add('caught');
+          if(b.targetFlower && b.targetFlower.occupant === b) b.targetFlower.occupant = null;
+          b.targetFlower = null;
+          caughtButterflies.push(b);
+          totalCaught++;
+          netCountEl.textContent = totalCaught;
+          if(!hintShown && caughtButterflies.length === 1) {
+            hintShown = true;
+            netHint.classList.add('show');
+          }
+        }
+      }
+    });
+
+    // Click to release all caught butterflies
+    document.addEventListener('click', e => {
+      if(!netMode || caughtButterflies.length === 0) return;
+      // Don't release if clicking the button itself
+      if(e.target === netBtn || netBtn.contains(e.target)) return;
+
+      const immuneUntil = Date.now() + 800;
+      netHint.classList.remove('show');
+      for(const b of caughtButterflies) {
+        b.state = 'scattering';
+        b.el.classList.remove('caught');
+        const angle = Math.random() * Math.PI * 2;
+        const burst = 6 + Math.random() * 4;
+        b.scatterVx = Math.cos(angle) * burst;
+        b.scatterVy = Math.sin(angle) * burst;
+        b.cooldown = 120;
+        b.netImmune = immuneUntil;
+      }
+      caughtButterflies.length = 0;
+    });
+  }
+
+  // Add caught state movement to the tick — butterflies follow the net
+  const origTick = tick;
+  // We need to hook into the tick loop for caught state
+  // The caught movement is handled inline below via a MutationObserver-free approach:
+  // We'll patch it by adding caught handling to the switch statement via the existing architecture.
+  // Actually, let's just add a post-tick hook:
+
+  function netTick() {
+    if(netMode) {
+      for(const b of caughtButterflies) {
+        if(b.state !== 'caught') continue;
+        // Follow the net cursor with slight offset per butterfly
+        const idx = caughtButterflies.indexOf(b);
+        const offX = Math.sin(idx * 2.3 + b.age * 0.05) * 8;
+        const offY = Math.cos(idx * 1.7 + b.age * 0.04) * 6 + 10;
+        const tx = mouse.x + offX;
+        const ty = mouse.y + offY;
+        b.x += (tx - b.x) * 0.2;
+        b.y += (ty - b.y) * 0.2;
+        b.vx = 0; b.vy = 0;
+        b.el.style.transform = `translate(${b.x - b.size/2}px, ${b.y - b.size/2}px) rotate(0deg)`;
+        b.el.style.opacity = b.opacity;
+      }
+    }
+    requestAnimationFrame(netTick);
+  }
+  requestAnimationFrame(netTick);
+
 })();
 </script>
+<div class="demo-banner bottom">This is a demo — not a live form. <span>But it is the bestest, most amazingest contact form in the entire world. I hope you enjoy, Andie &#10084;&#65039;</span></div>
 </body>
 </html>
