@@ -86,6 +86,7 @@
 
   .butterfly svg { animation: wingFlap 0.45s ease-in-out infinite alternate; }
   .butterfly.landed svg { animation: wingSlow 1.4s ease-in-out infinite alternate; }
+  .butterfly.dancing svg { animation: danceSpin 0.4s ease-in-out infinite alternate; }
   @keyframes wingFlap {
     0%   { transform: scaleX(1); }
     100% { transform: scaleX(0.55); }
@@ -93,6 +94,10 @@
   @keyframes wingSlow {
     0%   { transform: scaleX(1); }
     100% { transform: scaleX(0.8); }
+  }
+  @keyframes danceSpin {
+    0%   { transform: scaleX(1) rotate(-15deg); }
+    100% { transform: scaleX(0.6) rotate(15deg); }
   }
 
   /* ─── Card ─── */
@@ -577,6 +582,10 @@
       if(b.state==='caught'){
         /* Caught butterflies are handled by netTick — skip all state/movement logic */
       }
+      else if(b.state==='dancing'){
+        b.danceTime=(b.danceTime||0)+1;
+        if(b.danceTime>=b.danceDuration){b.state='wander';b.el.classList.remove('dancing');b.wanderAngle=Math.random()*Math.PI*2;b.danceTime=0;}
+      }
       else if(b.state==='flower_resting'){
         b.flowerRestTime++;
         if(b.flowerRestTime>=b.flowerRestDuration){b.state='wander';b.el.classList.remove('landed');b.wanderAngle=Math.random()*Math.PI*2;if(b.targetFlower)b.targetFlower.occupant=null;b.targetFlower=null;}
@@ -608,10 +617,11 @@
         case 'orbiting':{b.orbitAngle+=0.012;const tx=mouse.x+Math.cos(b.orbitAngle)*b.orbitDist,ty=mouse.y+Math.sin(b.orbitAngle)*b.orbitDist;b.x+=(tx-b.x)*0.035;b.y+=(ty-b.y)*0.035;if(b.orbitDist>ORBIT_RADIUS)b.orbitDist-=0.05;b.vx=(tx-b.x)*0.035;b.vy=(ty-b.y)*0.035;break;}
         case 'landed':{const li=i,offX=Math.sin(li*2.1)*12,offY=Math.cos(li*1.7)*8;const tX=mouse.x+offX,tY=mouse.y-b.size*0.4+offY,by=Math.sin(b.age*0.025)*0.6;b.x+=(tX-b.x)*0.08;b.y+=(tY+by-b.y)*0.08;b.vx=0;b.vy=0;break;}
         case 'flower_resting':{if(b.targetFlower){const by=Math.sin(b.age*0.02)*0.6;b.x+=(b.targetFlower.x-b.x)*0.1;b.y+=(b.targetFlower.y+by-b.y)*0.1;}b.vx=0;b.vy=0;break;}
+        case 'dancing':{const dt=b.danceTime||0;const loopR=20+Math.sin(dt*0.08)*10;const loopA=dt*0.12;const cx=b.danceOriginX+Math.cos(loopA)*loopR;const cy=b.danceOriginY+Math.sin(loopA*2)*loopR*0.6;b.x+=(cx-b.x)*0.12;b.y+=(cy-b.y)*0.12;b.vx=(cx-b.x)*0.12;b.vy=(cy-b.y)*0.12;break;}
         case 'scattering':{b.x+=b.scatterVx;b.y+=b.scatterVy;b.vx=b.scatterVx;b.vy=b.scatterVy;break;}
       }
-      if(b.state!=='landed'&&b.state!=='flower_resting'&&b.state!=='caught'){for(let j=0;j<butterflies.length;j++){if(j===i)continue;const o=butterflies[j];const sx=b.x-o.x,sy=b.y-o.y,sd=Math.sqrt(sx*sx+sy*sy);if(sd<35&&sd>0.1){const push=0.15*(1-sd/35);b.x+=sx/sd*push;b.y+=sy/sd*push;}}}
-      const rot=(b.state==='landed'||b.state==='flower_resting'||b.state==='caught')?0:Math.atan2(b.vy,b.vx)*(180/Math.PI)*0.15;
+      if(b.state!=='landed'&&b.state!=='flower_resting'&&b.state!=='caught'&&b.state!=='dancing'){for(let j=0;j<butterflies.length;j++){if(j===i)continue;const o=butterflies[j];const sx=b.x-o.x,sy=b.y-o.y,sd=Math.sqrt(sx*sx+sy*sy);if(sd<35&&sd>0.1){const push=0.15*(1-sd/35);b.x+=sx/sd*push;b.y+=sy/sd*push;}}}
+      const rot=(b.state==='landed'||b.state==='flower_resting'||b.state==='caught'||b.state==='dancing')?0:Math.atan2(b.vy,b.vx)*(180/Math.PI)*0.15;
       b.el.style.transform=`translate(${b.x-b.size/2}px, ${b.y-b.size/2}px) rotate(${rot}deg)`;
       b.el.style.opacity=b.opacity;
     }
@@ -641,6 +651,26 @@
       setTimeout(()=>releaseSparkle(s),600);
     });
   }
+
+  /* ─── Click to make butterflies dance ─── */
+  document.addEventListener('click', e => {
+    if(netMode) return;
+    const CLICK_RADIUS = 30;
+    for(const b of butterflies) {
+      if(b.state==='dancing'||b.state==='flower_resting'||b.state==='landed'||b.state==='caught') continue;
+      const dx=e.clientX-b.x, dy=e.clientY-b.y;
+      if(Math.sqrt(dx*dx+dy*dy) < CLICK_RADIUS) {
+        b.state='dancing';
+        b.el.classList.add('dancing');
+        b.danceOriginX=b.x;
+        b.danceOriginY=b.y;
+        b.danceTime=0;
+        b.danceDuration=120+Math.random()*60;
+        b.targetFlower=null;
+        break;
+      }
+    }
+  });
 
   /* ─── Butterfly Net Game ─── */
   const netBtn = document.getElementById('netBtn');

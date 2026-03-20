@@ -93,6 +93,7 @@
 
   .butterfly svg { animation: wingFlap 0.45s ease-in-out infinite alternate; }
   .butterfly.landed svg { animation: wingSlow 1.4s ease-in-out infinite alternate; }
+  .butterfly.dancing svg { animation: danceSpin 0.4s ease-in-out infinite alternate; }
   @keyframes wingFlap {
     0%   { transform: scaleX(1); }
     100% { transform: scaleX(0.55); }
@@ -100,6 +101,10 @@
   @keyframes wingSlow {
     0%   { transform: scaleX(1); }
     100% { transform: scaleX(0.8); }
+  }
+  @keyframes danceSpin {
+    0%   { transform: scaleX(1) rotate(-15deg); }
+    100% { transform: scaleX(0.6) rotate(15deg); }
   }
 
   /* ─── Card ─── */
@@ -153,6 +158,15 @@
     letter-spacing: 0.08em;
     color: var(--text-light);
     margin-bottom: 0.45rem;
+  }
+
+  .field-hint {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--text-light);
+    opacity: 0.8;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
   }
 
   input, textarea {
@@ -463,7 +477,8 @@
 
     <div class="field">
       <label for="message">Message</label>
-      <textarea id="message" name="message" placeholder="How can we help?" required maxlength="1200"></textarea>
+      <p class="field-hint">Whether you'd like to schedule an appointment or have questions about our services, we're here to help.</p>
+      <textarea id="message" name="message" placeholder="Tell us what's on your mind..." required maxlength="1200"></textarea>
       <div class="char-count"><span id="charUsed">0</span> / 1200</div>
       <div class="error-msg" id="messageError">Please write a short message.</div>
     </div>
@@ -671,7 +686,14 @@
       const dx=mouse.x-b.x, dy=mouse.y-b.y, dist=Math.sqrt(dx*dx+dy*dy);
 
       /* State transitions */
-      if(b.state==='flower_resting'){
+      if(b.state==='dancing'){
+        b.danceTime=(b.danceTime||0)+1;
+        if(b.danceTime>=b.danceDuration){
+          b.state='wander'; b.el.classList.remove('dancing');
+          b.wanderAngle=Math.random()*Math.PI*2; b.danceTime=0;
+        }
+      }
+      else if(b.state==='flower_resting'){
         b.flowerRestTime++;
         if(b.flowerRestTime>=b.flowerRestDuration){
           b.state='wander'; b.el.classList.remove('landed');
@@ -789,13 +811,23 @@
           }
           b.vx=0; b.vy=0; break;
         }
+        case 'dancing':{
+          const dt=b.danceTime||0;
+          const loopR=20+Math.sin(dt*0.08)*10;
+          const loopA=dt*0.12;
+          const cx=b.danceOriginX+Math.cos(loopA)*loopR;
+          const cy=b.danceOriginY+Math.sin(loopA*2)*loopR*0.6;
+          b.x+=(cx-b.x)*0.12; b.y+=(cy-b.y)*0.12;
+          b.vx=(cx-b.x)*0.12; b.vy=(cy-b.y)*0.12;
+          break;
+        }
         case 'scattering':{
           b.x+=b.scatterVx; b.y+=b.scatterVy; b.vx=b.scatterVx; b.vy=b.scatterVy; break;
         }
       }
 
       /* Separation — push apart from nearby butterflies */
-      if(b.state!=='landed'&&b.state!=='flower_resting'){
+      if(b.state!=='landed'&&b.state!=='flower_resting'&&b.state!=='dancing'){
         for(let j=0;j<butterflies.length;j++){
           if(j===i) continue;
           const o=butterflies[j];
@@ -808,7 +840,7 @@
         }
       }
 
-      const rot=(b.state==='landed'||b.state==='flower_resting')?0:Math.atan2(b.vy,b.vx)*(180/Math.PI)*0.15;
+      const rot=(b.state==='landed'||b.state==='flower_resting'||b.state==='dancing')?0:Math.atan2(b.vy,b.vx)*(180/Math.PI)*0.15;
       b.el.style.transform=`translate(${b.x-b.size/2}px, ${b.y-b.size/2}px) rotate(${rot}deg)`;
       b.el.style.opacity=b.opacity;
     }
@@ -863,6 +895,25 @@
       setTimeout(() => releaseSparkle(s), 600);
     });
   }
+
+  /* ─── Click to make butterflies dance ─── */
+  document.addEventListener('click', e => {
+    const CLICK_RADIUS = 30;
+    for(const b of butterflies) {
+      if(b.state==='dancing'||b.state==='flower_resting'||b.state==='landed') continue;
+      const dx=e.clientX-b.x, dy=e.clientY-b.y;
+      if(Math.sqrt(dx*dx+dy*dy) < CLICK_RADIUS) {
+        b.state='dancing';
+        b.el.classList.add('dancing');
+        b.danceOriginX=b.x;
+        b.danceOriginY=b.y;
+        b.danceTime=0;
+        b.danceDuration=120+Math.random()*60;
+        b.targetFlower=null;
+        break;
+      }
+    }
+  });
 
   /* ─── Validation & Submit ─── */
   const form = document.getElementById('contactForm');
