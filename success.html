@@ -413,7 +413,7 @@
     <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
   </div>
   <h1 class="brand">Papillon Center</h1>
-  <h2 class="heading">You've Taken a Beautiful Step</h2>
+  <h2 class="heading" id="successHeading">You've Taken a Beautiful Step</h2>
   <p class="msg">Your message is on its way to our team — we're honored you chose to reach out. This is the beginning of something wonderful, and we can't wait to be part of your journey. We'll be in touch soon!</p>
   <p class="msg phone-line">If you'd like to talk to us directly, we're always happy to hear from you — give us a call at <a href="tel:+12156931199" class="phone-link">(215) 693-1199</a></p>
 </div>
@@ -446,6 +446,17 @@
 
 <script>
 (function(){
+
+  /* ─── Personalize greeting ─── */
+  const params = new URLSearchParams(window.location.search);
+  const userName = params.get('name');
+  if(userName) {
+    const heading = document.getElementById('successHeading');
+    const safe = document.createElement('span');
+    safe.textContent = userName;
+    heading.textContent = '';
+    heading.append(safe.textContent + ', You\u2019ve Taken a Beautiful Step');
+  }
 
   /* ─── Creature generation ─── */
   const creaturesEl = document.getElementById('creatures');
