@@ -967,8 +967,7 @@
         headers: { 'Accept': 'application/json' }
       });
       if(resp.ok) {
-        const userName = encodeURIComponent(nameIn.value.trim());
-        window.location.href = document.querySelector('input[name="_next"]').value + '?name=' + userName;
+        window.location.href = document.querySelector('input[name="_next"]').value;
       } else {
         throw new Error('Non-2xx response');
       }

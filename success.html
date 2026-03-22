@@ -413,7 +413,7 @@
     <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
   </div>
   <h1 class="brand">Papillon Center</h1>
-  <h2 class="heading" id="successHeading">You've Taken a Beautiful Step</h2>
+  <h2 class="heading">You've Taken a Beautiful Step</h2>
   <p class="msg">Your message is on its way to our team — we're honored you chose to reach out. This is the beginning of something wonderful, and we can't wait to be part of your journey. We'll be in touch soon!</p>
   <p class="msg phone-line">If you'd like to talk to us directly, we're always happy to hear from you — give us a call at <a href="tel:+12156931199" class="phone-link">(215) 693-1199</a></p>
 </div>
@@ -446,17 +446,6 @@
 
 <script>
 (function(){
-
-  /* ─── Personalize greeting ─── */
-  const params = new URLSearchParams(window.location.search);
-  const userName = params.get('name');
-  if(userName) {
-    const heading = document.getElementById('successHeading');
-    const safe = document.createElement('span');
-    safe.textContent = userName;
-    heading.textContent = '';
-    heading.append(safe.textContent + ', You\u2019ve Taken a Beautiful Step');
-  }
 
   /* ─── Creature generation ─── */
   const creaturesEl = document.getElementById('creatures');
@@ -517,17 +506,38 @@
 
   function positionFlowers() {
     flowersEl.innerHTML=''; flowers.length=0;
+    const w=W(), h=H();
     const card=document.querySelector('.card'), rect=card.getBoundingClientRect();
-    const spots=[
-      {x:rect.left-30,y:rect.bottom-20},{x:rect.left+15,y:rect.bottom+15},
-      {x:rect.right-15,y:rect.bottom+15},{x:rect.right+25,y:rect.bottom-30},
+    const petalHues=[320,330,210,280,340,200,290,310,315,225,345,195];
+    const TOTAL_FLOWERS = 20;
+
+    // Keep some around the card
+    const cardSpots=[
+      {x:rect.left-30,y:rect.bottom-20},{x:rect.right+25,y:rect.bottom-30},
       {x:rect.left-35,y:rect.top+rect.height*0.5},{x:rect.right+30,y:rect.top+rect.height*0.4},
-      {x:rect.left+rect.width*0.3,y:rect.bottom+10},{x:rect.left+rect.width*0.7,y:rect.bottom+10},
+      {x:rect.left+rect.width*0.3,y:rect.bottom+15},{x:rect.left+rect.width*0.7,y:rect.bottom+15},
     ];
-    const petalHues=[320,330,210,280,340,200,290,310];
-    spots.forEach((spot,i)=>{
+
+    // Scatter the rest across the viewport
+    const allSpots = [...cardSpots];
+    const cardPad = 80; // avoid placing inside the card
+    for(let n=allSpots.length; n<TOTAL_FLOWERS; n++){
+      let x, y, tries=0;
+      do {
+        x = 40 + Math.random()*(w-80);
+        y = 40 + Math.random()*(h-80);
+        tries++;
+      } while(
+        tries < 20 &&
+        x > rect.left-cardPad && x < rect.right+cardPad &&
+        y > rect.top-cardPad && y < rect.bottom+cardPad
+      );
+      allSpots.push({x, y});
+    }
+
+    allSpots.forEach((spot,i)=>{
       const el=document.createElement('div'); el.classList.add('flower');
-      const size=24+Math.random()*14;
+      const size = 20 + Math.random()*18;
       el.innerHTML=makeSVGFlower(petalHues[i%petalHues.length]+Math.random()*20-10,40+Math.random()*20,size);
       el.style.left=(spot.x-size/2)+'px'; el.style.top=(spot.y-size*0.5)+'px';
       flowersEl.appendChild(el);
